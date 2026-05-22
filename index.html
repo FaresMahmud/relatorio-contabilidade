@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Financeiro — 2024 & 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0f14;
+  --surface: #141720;
+  --surface2: #1c2030;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --muted: #7a7f96;
+  --accent: #c8a97e;
+  --accent2: #7eb5c8;
+  --green: #6fcf97;
+  --red: #eb5757;
+  --yellow: #f2c94c;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 5%, rgba(200,169,126,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 95%, rgba(126,181,200,0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HEADER ── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,15,20,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-meta {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.btn-pdf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.btn-pdf:hover {
+  background: var(--surface2);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-pdf svg { width: 14px; height: 14px; }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 2.5rem 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s ease forwards;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  color: var(--text);
+  max-width: 640px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s ease forwards;
+}
+
+.hero h1 em { font-style: italic; color: var(--accent); }
+
+.hero-sub {
+  margin-top: 1rem;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.3s ease forwards;
+}
+
+/* ── TIMELINE ── */
+.timeline-wrap {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  opacity: 0;
+  animation: fadeUp 0.6s 0.4s ease forwards;
+}
+
+.timeline-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+.timeline-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+  position: relative;
+}
+
+.tl-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--bg);
+  transition: transform 0.2s, background 0.2s;
+  cursor: default;
+}
+
+.tl-dot.gold { border-color: var(--accent); }
+.tl-dot.blue { border-color: var(--accent2); }
+
+.tl-node:hover .tl-dot { transform: scale(1.5); background: var(--accent); }
+.tl-node.blue-node:hover .tl-dot { background: var(--accent2); }
+
+.tl-content {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.tl-year {
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--text);
+  display: block;
+}
+
+.tl-sub {
+  font-size: 10px;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.tl-node .tl-tooltip {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.tl-node:hover .tl-tooltip { opacity: 1; }
+
+.tl-tooltip-row { display: flex; justify-content: space-between; gap: 20px; margin: 2px 0; }
+.tl-tooltip-key { color: var(--muted); }
+.tl-tooltip-val { color: var(--text); font-weight: 500; }
+
+/* ── HEALTH BAR ── */
+.health-wrap {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.health-title {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.health-items {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.health-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.health-item-label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.health-bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+}
+
+.health-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(.34,1.2,.64,1);
+}
+
+.health-bar-fill.green { background: var(--green); }
+.health-bar-fill.yellow { background: var(--yellow); }
+.health-bar-fill.red { background: var(--red); }
+
+.health-item-val {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.health-item-val.green { color: var(--green); }
+.health-item-val.yellow { color: var(--yellow); }
+.health-item-val.red { color: var(--red); }
+
+/* ── TABS ── */
+.tabs-bar {
+  position: relative;
+  z-index: 1;
+  padding: 0 2.5rem;
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(13,15,20,0.6);
+}
+
+.tab {
+  padding: 14px 24px 15px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── MAIN ── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.section-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+/* ── METRIC CARDS ── */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.25rem 1rem;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+
+.metric-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, transparent);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.metric-card.accent-gold { --card-accent: var(--accent); }
+.metric-card.accent-blue { --card-accent: var(--accent2); }
+.metric-card.accent-green { --card-accent: var(--green); }
+.metric-card.accent-red { --card-accent: var(--red); }
+
+/* tooltip popup */
+.metric-card .card-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  width: 220px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 50;
+  line-height: 1.5;
+}
+
+.metric-card:hover .card-tooltip { opacity: 1; }
+
+.card-tooltip-title {
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.card-tooltip-formula {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.card-tooltip-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.card-tooltip-line span:last-child { color: var(--accent); font-weight: 500; }
+
+.metric-label-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.metric-value.positive { color: var(--green); }
+.metric-value.negative { color: var(--red); }
+
+/* sparkline */
+.sparkline-wrap {
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+}
+
+.spark-bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  transition: height 0.8s cubic-bezier(.34,1.2,.64,1);
+}
+
+.metric-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ── CHART CARD ── */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+
+.chart-card:hover { border-color: var(--border2); }
+
+.chart-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.chart-card p { font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; }
+
+.chart-wrap { position: relative; width: 100%; }
+
+/* ── LAYOUT ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── TABLE ── */
+.detail-table { width: 100%; border-collapse: collapse; }
+
+.detail-table th {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-table th:not(:first-child) { text-align: right; }
+
+.detail-table td {
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-table td:not(:first-child) { text-align: right; font-weight: 500; color: var(--accent); }
+
+.detail-table tr:last-child td { border-bottom: none; }
+
+.total-row td { font-weight: 500; color: var(--text) !important; padding-top: 14px; }
+.total-row td:not(:first-child) { color: var(--text) !important; }
+
+/* ── BADGE ── */
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.badge-up { background: rgba(111,207,151,0.12); color: var(--green); }
+.badge-down { background: rgba(235,87,87,0.12); color: var(--red); }
+.badge-neutral { background: rgba(242,201,76,0.12); color: var(--yellow); }
+
+/* ── ANALYSIS PANEL ── */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.analysis-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.analysis-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+.analysis-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.analysis-icon.gold { background: rgba(200,169,126,0.12); }
+.analysis-icon.blue { background: rgba(126,181,200,0.12); }
+.analysis-icon.green { background: rgba(111,207,151,0.12); }
+.analysis-icon.red { background: rgba(235,87,87,0.12); }
+
+.analysis-card h4 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.analysis-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.analysis-card .analysis-verdict {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: 99px;
+  margin-top: 10px;
+}
+
+/* ── COMPARE ── */
+.compare-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.compare-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: border-color 0.2s;
+  cursor: default;
+}
+
+.compare-card:hover { border-color: var(--border2); }
+
+.compare-card:hover .compare-bar { filter: brightness(1.2); }
+
+.compare-metric {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.compare-bar-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  height: 52px;
+  margin: 8px 0 10px;
+}
+
+.compare-bar {
+  border-radius: 4px 4px 0 0;
+  width: 28px;
+  min-height: 4px;
+  transition: filter 0.2s;
+  position: relative;
+}
+
+.compare-bar .bar-label {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.bar-24 { background: var(--accent); }
+.bar-25 { background: var(--accent2); }
+.bar-neg { background: var(--red); }
+
+.compare-vals { display: flex; gap: 10px; font-size: 11px; flex-wrap: wrap; }
+.cv24 { color: var(--accent); }
+.cv25 { color: var(--accent2); }
+.cv-neg { color: var(--red); }
+
+.compare-delta { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+/* ── INDICES ── */
+.indices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.index-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: all 0.2s;
+}
+
+.index-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+.index-name {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.index-values {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.index-val {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.index-val-year { font-size: 10px; color: var(--muted); }
+.index-val-num { font-family: var(--font-display); font-size: 1.3rem; }
+.index-val-num.gold { color: var(--accent); }
+.index-val-num.blue { color: var(--accent2); }
+
+.index-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.panel.active .metric-card { animation: fadeUp 0.4s ease both; }
+.panel.active .chart-card { animation: fadeUp 0.5s ease both; }
+.panel.active .compare-card { animation: fadeUp 0.4s ease both; }
+.panel.active .analysis-card { animation: fadeUp 0.4s ease both; }
+.panel.active .index-card { animation: fadeUp 0.4s ease both; }
+
+.panel.active .metric-card:nth-child(1) { animation-delay: 0.05s; }
+.panel.active .metric-card:nth-child(2) { animation-delay: 0.10s; }
+.panel.active .metric-card:nth-child(3) { animation-delay: 0.15s; }
+.panel.active .metric-card:nth-child(4) { animation-delay: 0.20s; }
+.panel.active .metric-card:nth-child(5) { animation-delay: 0.25s; }
+.panel.active .metric-card:nth-child(6) { animation-delay: 0.30s; }
+
+.panel.active .compare-card:nth-child(1) { animation-delay: 0.05s; }
+.panel.active .compare-card:nth-child(2) { animation-delay: 0.10s; }
+.panel.active .compare-card:nth-child(3) { animation-delay: 0.15s; }
+.panel.active .compare-card:nth-child(4) { animation-delay: 0.20s; }
+
+.panel.active .analysis-card:nth-child(1) { animation-delay: 0.05s; }
+.panel.active .analysis-card:nth-child(2) { animation-delay: 0.10s; }
+.panel.active .analysis-card:nth-child(3) { animation-delay: 0.15s; }
+.panel.active .analysis-card:nth-child(4) { animation-delay: 0.20s; }
+
+.panel.active .index-card:nth-child(1) { animation-delay: 0.05s; }
+.panel.active .index-card:nth-child(2) { animation-delay: 0.10s; }
+.panel.active .index-card:nth-child(3) { animation-delay: 0.15s; }
+.panel.active .index-card:nth-child(4) { animation-delay: 0.20s; }
+
+@media print {
+  body::before { display: none; }
+  header { position: static; backdrop-filter: none; }
+  .btn-pdf, .tabs-bar, .tab { display: none; }
+  .panel { display: block !important; }
+  .section-label:first-child { margin-top: 2rem; }
+  .metric-card, .chart-card, .compare-card, .analysis-card, .index-card { break-inside: avoid; }
+  .chart-wrap canvas { max-height: 260px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">FinReport</div>
+  <div class="header-right">
+    <span class="header-meta">Empresa de Tecnologia — Contabilidade Gerencial</span>
+    <button class="btn-pdf" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Exportar PDF
+    </button>
+  </div>
+</header>
+
+<div class="hero">
+  <p class="hero-label">Demonstrações Financeiras</p>
+  <h1>Relatório <em>Anual</em><br>2024 &amp; 2025</h1>
+  <p class="hero-sub">Análise do balanço patrimonial, resultado operacional e indicadores de desempenho financeiro.</p>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-wrap">
+  <p class="timeline-label">Linha do Tempo</p>
+  <div class="timeline" style="padding: 8px 32px 48px;">
+    <div class="tl-node" style="position:relative">
+      <div class="tl-dot gold"></div>
+      <div class="tl-tooltip">
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">Ativo Total</span><span class="tl-tooltip-val">R$ 231.000</span></div>
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">Receita Líq.</span><span class="tl-tooltip-val">R$ 130.000</span></div>
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">EBITDA</span><span class="tl-tooltip-val" style="color:#eb5757">−R$ 22.800</span></div>
+      </div>
+      <div class="tl-content">
+        <span class="tl-year">2024</span>
+        <span class="tl-sub">Exercício Inicial</span>
+      </div>
+    </div>
+    <div class="timeline-line"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;position:relative;z-index:2">
+      <div style="width:1px;height:14px;background:rgba(255,255,255,0.15)"></div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.08em;padding:3px 10px;border:1px solid var(--border);border-radius:99px;background:var(--surface);white-space:nowrap">Crescimento de Receita ↑ 26,9%</div>
+      <div style="width:1px;height:14px;background:rgba(255,255,255,0.15)"></div>
+    </div>
+    <div class="timeline-line"></div>
+    <div class="tl-node blue-node" style="position:relative">
+      <div class="tl-dot blue"></div>
+      <div class="tl-tooltip">
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">Ativo Total</span><span class="tl-tooltip-val">R$ 268.300</span></div>
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">Receita Líq.</span><span class="tl-tooltip-val">R$ 165.000</span></div>
+        <div class="tl-tooltip-row"><span class="tl-tooltip-key">EBITDA</span><span class="tl-tooltip-val" style="color:#eb5757">−R$ 33.500</span></div>
+      </div>
+      <div class="tl-content">
+        <span class="tl-year" style="color:var(--accent2)">2025</span>
+        <span class="tl-sub">Exercício Atual</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HEALTH BAR -->
+<div class="health-wrap" id="health-section">
+  <span class="health-title">Saúde Financeira</span>
+  <div class="health-items">
+    <div class="health-item">
+      <span class="health-item-label">Liquidez Geral 2024</span>
+      <div class="health-bar-track"><div class="health-bar-fill green" id="hb1" style="width:0%"></div></div>
+      <span class="health-item-val green" id="hv1">3,28</span>
+    </div>
+    <div class="health-item">
+      <span class="health-item-label">Liquidez Geral 2025</span>
+      <div class="health-bar-track"><div class="health-bar-fill yellow" id="hb2" style="width:0%"></div></div>
+      <span class="health-item-val yellow" id="hv2">2,93</span>
+    </div>
+    <div class="health-item">
+      <span class="health-item-label">Endividamento 2024</span>
+      <div class="health-bar-track"><div class="health-bar-fill green" id="hb3" style="width:0%"></div></div>
+      <span class="health-item-val green" id="hv3">30,5%</span>
+    </div>
+    <div class="health-item">
+      <span class="health-item-label">Endividamento 2025</span>
+      <div class="health-bar-track"><div class="health-bar-fill yellow" id="hb4" style="width:0%"></div></div>
+      <span class="health-item-val yellow" id="hv4">34,2%</span>
+    </div>
+    <div class="health-item">
+      <span class="health-item-label">Margem EBITDA 2024</span>
+      <div class="health-bar-track"><div class="health-bar-fill red" id="hb5" style="width:0%"></div></div>
+      <span class="health-item-val red" id="hv5">−17,5%</span>
+    </div>
+    <div class="health-item">
+      <span class="health-item-label">Margem EBITDA 2025</span>
+      <div class="health-bar-track"><div class="health-bar-fill red" id="hb6" style="width:0%"></div></div>
+      <span class="health-item-val red" id="hv6">−20,3%</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab active" onclick="switchTab('2024')">2024</button>
+  <button class="tab" onclick="switchTab('2025')">2025</button>
+  <button class="tab" onclick="switchTab('comp')">Comparativo</button>
+  <button class="tab" onclick="switchTab('analise')">Análise</button>
+  <button class="tab" onclick="switchTab('indices')">Índices</button>
+</div>
+
+<main>
+
+  <!-- ══ 2024 ══ -->
+  <div class="panel active" id="panel-2024">
+    <p class="section-label">Balanço Patrimonial</p>
+    <div class="metric-grid">
+
+      <div class="metric-card accent-gold">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Ativo Total</div>
+          <div class="card-tooltip-formula">Soma de todos os bens e direitos</div>
+          <div class="card-tooltip-line"><span>Caixa</span><span>R$ 32.000</span></div>
+          <div class="card-tooltip-line"><span>Aplicações</span><span>R$ 15.000</span></div>
+          <div class="card-tooltip-line"><span>Clientes</span><span>R$ 48.000</span></div>
+          <div class="card-tooltip-line"><span>Estoques</span><span>R$ 67.000</span></div>
+          <div class="card-tooltip-line"><span>Imobilizado</span><span>R$ 69.000</span></div>
+        </div>
+        <p class="metric-label-text">Ativo Total</p>
+        <p class="metric-value" data-target="231000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-ativo24"></div>
+        <p class="metric-note">8 grupos de ativos</p>
+      </div>
+
+      <div class="metric-card accent-blue">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Passivo Total</div>
+          <div class="card-tooltip-formula">Total de obrigações da empresa</div>
+          <div class="card-tooltip-line"><span>Fornecedores</span><span>R$ 18.000</span></div>
+          <div class="card-tooltip-line"><span>Empréstimos</span><span>R$ 12.000</span></div>
+          <div class="card-tooltip-line"><span>Salários</span><span>R$ 14.500</span></div>
+          <div class="card-tooltip-line"><span>Impostos</span><span>R$ 6.000</span></div>
+          <div class="card-tooltip-line"><span>Financiamentos</span><span>R$ 20.000</span></div>
+        </div>
+        <p class="metric-label-text">Passivo Total</p>
+        <p class="metric-value" data-target="70500" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-passivo24"></div>
+        <p class="metric-note">5 obrigações</p>
+      </div>
+
+      <div class="metric-card accent-green">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Situação Líquida</div>
+          <div class="card-tooltip-formula">Ativo Total − Passivo Total</div>
+          <div class="card-tooltip-line"><span>Ativo</span><span>R$ 231.000</span></div>
+          <div class="card-tooltip-line"><span>Passivo</span><span>R$ 70.500</span></div>
+          <div class="card-tooltip-line"><span>= Patrimônio Líquido</span><span>R$ 160.500</span></div>
+        </div>
+        <p class="metric-label-text">Situação Líquida</p>
+        <p class="metric-value positive" data-target="160500" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-sl24"></div>
+        <p class="metric-note">Patrimônio Líquido</p>
+      </div>
+    </div>
+
+    <p class="section-label">Resultado Operacional</p>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Receita Bruta</div>
+          <div class="card-tooltip-formula">Total faturado no exercício</div>
+          <div class="card-tooltip-line"><span>Faturamento</span><span>R$ 145.000</span></div>
+        </div>
+        <p class="metric-label-text">Receita Bruta</p>
+        <p class="metric-value" data-target="145000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note">Total faturado</p>
+      </div>
+      <div class="metric-card">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Receita Líquida</div>
+          <div class="card-tooltip-formula">Receita Bruta − Simples Nacional</div>
+          <div class="card-tooltip-line"><span>Bruta</span><span>R$ 145.000</span></div>
+          <div class="card-tooltip-line"><span>Simples Nacional</span><span>−R$ 15.000</span></div>
+          <div class="card-tooltip-line"><span>= Líquida</span><span>R$ 130.000</span></div>
+        </div>
+        <p class="metric-label-text">Receita Líquida</p>
+        <p class="metric-value" data-target="130000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note">Após Simples Nacional (R$ 15k)</p>
+      </div>
+      <div class="metric-card">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Margem de Contribuição</div>
+          <div class="card-tooltip-formula">Receita Líquida − CMV</div>
+          <div class="card-tooltip-line"><span>Receita Líq.</span><span>R$ 130.000</span></div>
+          <div class="card-tooltip-line"><span>CMV</span><span>−R$ 82.000</span></div>
+          <div class="card-tooltip-line"><span>= Margem</span><span>R$ 48.000</span></div>
+        </div>
+        <p class="metric-label-text">Margem de Contribuição</p>
+        <p class="metric-value" data-target="48000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note">Receita líq. − CMV (R$ 82k)</p>
+      </div>
+      <div class="metric-card accent-red">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">EBITDA</div>
+          <div class="card-tooltip-formula">Receita Líq. − CMV − Desp. Op.</div>
+          <div class="card-tooltip-line"><span>Receita Líq.</span><span>R$ 130.000</span></div>
+          <div class="card-tooltip-line"><span>CMV</span><span>−R$ 82.000</span></div>
+          <div class="card-tooltip-line"><span>Desp. Operac.</span><span>−R$ 70.800</span></div>
+          <div class="card-tooltip-line"><span>= EBITDA</span><span style="color:#eb5757">−R$ 22.800</span></div>
+        </div>
+        <p class="metric-label-text">EBITDA</p>
+        <p class="metric-value negative" data-target="-22800" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note">Despesas operacionais: R$ 70.800</p>
+      </div>
+    </div>
+
+    <p class="section-label">Detalhamento</p>
+    <div class="two-col">
+      <div class="chart-card">
+        <h3>Composição do Ativo</h3>
+        <p>Distribuição dos grupos patrimoniais — 2024</p>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="c-ativo24" role="img" aria-label="Composição do ativo 2024"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Despesas Operacionais</h3>
+        <p>Breakdown — total R$ 70.800</p>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="c-desp24" role="img" aria-label="Despesas operacionais 2024"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label">Passivo Detalhado</p>
+    <div class="chart-card">
+      <table class="detail-table">
+        <thead><tr><th>Item</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Fornecedores</td><td>R$ 18.000,00</td></tr>
+          <tr><td>Empréstimos Bancários</td><td>R$ 12.000,00</td></tr>
+          <tr><td>Salários a Pagar</td><td>R$ 14.500,00</td></tr>
+          <tr><td>Impostos a Recolher</td><td>R$ 6.000,00</td></tr>
+          <tr><td>Financiamentos LP</td><td>R$ 20.000,00</td></tr>
+          <tr class="total-row"><td><strong>Total Passivo</strong></td><td>R$ 70.500,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 2025 ══ -->
+  <div class="panel" id="panel-2025">
+    <p class="section-label">Balanço Patrimonial</p>
+    <div class="metric-grid">
+      <div class="metric-card accent-gold">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Ativo Total</div>
+          <div class="card-tooltip-formula">Crescimento de 16,1% vs 2024</div>
+          <div class="card-tooltip-line"><span>Caixa</span><span>R$ 18.500</span></div>
+          <div class="card-tooltip-line"><span>Aplicações</span><span>R$ 28.000</span></div>
+          <div class="card-tooltip-line"><span>Clientes</span><span>R$ 74.000</span></div>
+          <div class="card-tooltip-line"><span>Estoques</span><span>R$ 60.300</span></div>
+          <div class="card-tooltip-line"><span>Imobilizado</span><span>R$ 87.500</span></div>
+        </div>
+        <p class="metric-label-text">Ativo Total</p>
+        <p class="metric-value" data-target="268300" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-ativo25"></div>
+        <p class="metric-note"><span class="badge badge-up">↑ 16,1%</span> vs 2024</p>
+      </div>
+      <div class="metric-card accent-blue">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Passivo Total</div>
+          <div class="card-tooltip-formula">Cresceu 30,1% — mais que o ativo</div>
+          <div class="card-tooltip-line"><span>Fornecedores</span><span>R$ 22.500</span></div>
+          <div class="card-tooltip-line"><span>Empréstimos</span><span>R$ 31.000</span></div>
+          <div class="card-tooltip-line"><span>Salários</span><span>R$ 17.200</span></div>
+          <div class="card-tooltip-line"><span>Impostos</span><span>R$ 11.000</span></div>
+          <div class="card-tooltip-line"><span>Financiamentos</span><span>R$ 10.000</span></div>
+        </div>
+        <p class="metric-label-text">Passivo Total</p>
+        <p class="metric-value" data-target="91700" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-passivo25"></div>
+        <p class="metric-note"><span class="badge badge-down">↑ 30,1%</span> vs 2024</p>
+      </div>
+      <div class="metric-card accent-green">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Situação Líquida</div>
+          <div class="card-tooltip-formula">Ativo Total − Passivo Total</div>
+          <div class="card-tooltip-line"><span>Ativo</span><span>R$ 268.300</span></div>
+          <div class="card-tooltip-line"><span>Passivo</span><span>R$ 91.700</span></div>
+          <div class="card-tooltip-line"><span>= Patrimônio Líquido</span><span>R$ 176.600</span></div>
+        </div>
+        <p class="metric-label-text">Situação Líquida</p>
+        <p class="metric-value positive" data-target="176600" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <div class="sparkline-wrap" id="spark-sl25"></div>
+        <p class="metric-note"><span class="badge badge-up">↑ 10,0%</span> vs 2024</p>
+      </div>
+    </div>
+
+    <p class="section-label">Resultado Operacional</p>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <p class="metric-label-text">Receita Bruta</p>
+        <p class="metric-value" data-target="192000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note"><span class="badge badge-up">↑ 32,4%</span> vs 2024</p>
+      </div>
+      <div class="metric-card">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Receita Líquida</div>
+          <div class="card-tooltip-formula">R$ 192.000 − R$ 27.000</div>
+          <div class="card-tooltip-line"><span>Bruta</span><span>R$ 192.000</span></div>
+          <div class="card-tooltip-line"><span>Simples Nacional</span><span>−R$ 27.000</span></div>
+          <div class="card-tooltip-line"><span>= Líquida</span><span>R$ 165.000</span></div>
+        </div>
+        <p class="metric-label-text">Receita Líquida</p>
+        <p class="metric-value" data-target="165000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note"><span class="badge badge-up">↑ 26,9%</span> vs 2024</p>
+      </div>
+      <div class="metric-card">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">Margem de Contribuição</div>
+          <div class="card-tooltip-formula">R$ 165.000 − R$ 108.000</div>
+          <div class="card-tooltip-line"><span>Receita Líq.</span><span>R$ 165.000</span></div>
+          <div class="card-tooltip-line"><span>CMV</span><span>−R$ 108.000</span></div>
+          <div class="card-tooltip-line"><span>= Margem</span><span>R$ 57.000</span></div>
+        </div>
+        <p class="metric-label-text">Margem de Contribuição</p>
+        <p class="metric-value" data-target="57000" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note"><span class="badge badge-up">↑ 18,8%</span> vs 2024</p>
+      </div>
+      <div class="metric-card accent-red">
+        <div class="card-tooltip">
+          <div class="card-tooltip-title">EBITDA</div>
+          <div class="card-tooltip-formula">R$ 165k − R$ 108k − R$ 90,5k</div>
+          <div class="card-tooltip-line"><span>Receita Líq.</span><span>R$ 165.000</span></div>
+          <div class="card-tooltip-line"><span>CMV</span><span>−R$ 108.000</span></div>
+          <div class="card-tooltip-line"><span>Desp. Operac.</span><span>−R$ 90.500</span></div>
+          <div class="card-tooltip-line"><span>= EBITDA</span><span style="color:#eb5757">−R$ 33.500</span></div>
+        </div>
+        <p class="metric-label-text">EBITDA</p>
+        <p class="metric-value negative" data-target="-33500" data-prefix="R$ " data-format="currency">R$ 0</p>
+        <p class="metric-note">Despesas operacionais: R$ 90.500</p>
+      </div>
+    </div>
+
+    <p class="section-label">Detalhamento</p>
+    <div class="two-col">
+      <div class="chart-card">
+        <h3>Composição do Ativo</h3>
+        <p>Distribuição dos grupos patrimoniais — 2025</p>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="c-ativo25" role="img" aria-label="Composição do ativo 2025"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Despesas Operacionais</h3>
+        <p>Breakdown — total R$ 90.500</p>
+        <div class="chart-wrap" style="height:240px">
+          <canvas id="c-desp25" role="img" aria-label="Despesas operacionais 2025"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label">Passivo Detalhado</p>
+    <div class="chart-card">
+      <table class="detail-table">
+        <thead><tr><th>Item</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Fornecedores</td><td>R$ 22.500,00</td></tr>
+          <tr><td>Empréstimos Bancários</td><td>R$ 31.000,00</td></tr>
+          <tr><td>Salários a Pagar</td><td>R$ 17.200,00</td></tr>
+          <tr><td>Impostos a Recolher</td><td>R$ 11.000,00</td></tr>
+          <tr><td>Financiamentos LP</td><td>R$ 10.000,00</td></tr>
+          <tr class="total-row"><td><strong>Total Passivo</strong></td><td>R$ 91.700,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ COMPARATIVO ══ -->
+  <div class="panel" id="panel-comp">
+    <p class="section-label" style="margin-top:0;border-top:none;padding-top:0">Variações entre Exercícios</p>
+    <div class="compare-row">
+      <div class="compare-card">
+        <p class="compare-metric">Ativo Total</p>
+        <div class="compare-bar-wrap">
+          <div class="compare-bar bar-24" style="height:38px"><span class="bar-label">2024</span></div>
+          <div class="compare-bar bar-25" style="height:48px"><span class="bar-label">2025</span></div>
+        </div>
+        <div class="compare-vals"><span class="cv24">R$ 231k</span><span class="cv25">R$ 268k</span></div>
+        <p class="compare-delta"><span class="badge badge-up">↑ 16,1%</span></p>
+      </div>
+      <div class="compare-card">
+        <p class="compare-metric">Receita Líquida</p>
+        <div class="compare-bar-wrap">
+          <div class="compare-bar bar-24" style="height:32px"><span class="bar-label">2024</span></div>
+          <div class="compare-bar bar-25" style="height:48px"><span class="bar-label">2025</span></div>
+        </div>
+        <div class="compare-vals"><span class="cv24">R$ 130k</span><span class="cv25">R$ 165k</span></div>
+        <p class="compare-delta"><span class="badge badge-up">↑ 26,9%</span></p>
+      </div>
+      <div class="compare-card">
+        <p class="compare-metric">Passivo Total</p>
+        <div class="compare-bar-wrap">
+          <div class="compare-bar bar-24" style="height:28px"><span class="bar-label">2024</span></div>
+          <div class="compare-bar bar-25" style="height:48px; background:var(--red);"><span class="bar-label">2025</span></div>
+        </div>
+        <div class="compare-vals"><span class="cv24">R$ 70,5k</span><span class="cv-neg">R$ 91,7k</span></div>
+        <p class="compare-delta"><span class="badge badge-down">↑ 30,1% — atenção</span></p>
+      </div>
+      <div class="compare-card">
+        <p class="compare-metric">EBITDA</p>
+        <div class="compare-bar-wrap" style="align-items:center;">
+          <div class="compare-bar bar-neg" style="height:20px;opacity:0.6;"><span class="bar-label">2024</span></div>
+          <div class="compare-bar bar-neg" style="height:48px;"><span class="bar-label">2025</span></div>
+        </div>
+        <div class="compare-vals"><span class="cv-neg">−R$ 22,8k</span><span class="cv-neg">−R$ 33,5k</span></div>
+        <p class="compare-delta"><span class="badge badge-down">Piora de R$ 10,7k</span></p>
+      </div>
+    </div>
+
+    <p class="section-label">Gráfico Comparativo</p>
+    <div class="chart-card">
+      <h3>Todos os Indicadores — 2024 vs 2025</h3>
+      <p>Valores em reais (R$). Passe o mouse sobre as barras para ver os detalhes.</p>
+      <div style="display:flex;gap:16px;margin-bottom:1rem;font-size:12px;color:var(--muted);">
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#c8a97e;display:inline-block"></span>2024</span>
+        <span style="display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#7eb5c8;display:inline-block"></span>2025</span>
+      </div>
+      <div class="chart-wrap" style="height:340px">
+        <canvas id="c-comp" role="img" aria-label="Comparativo 2024 vs 2025"></canvas>
+      </div>
+    </div>
+
+    <p class="section-label">Tabela Resumo Completa</p>
+    <div class="chart-card">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>Indicador</th>
+            <th>2024</th>
+            <th>2025</th>
+            <th>Variação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ativo Total</td><td>R$ 231.000</td><td>R$ 268.300</td><td><span class="badge badge-up">↑ 16,1%</span></td></tr>
+          <tr><td>Passivo Total</td><td>R$ 70.500</td><td>R$ 91.700</td><td><span class="badge badge-down">↑ 30,1%</span></td></tr>
+          <tr><td>Situação Líquida</td><td>R$ 160.500</td><td>R$ 176.600</td><td><span class="badge badge-up">↑ 10,0%</span></td></tr>
+          <tr><td>Receita Bruta</td><td>R$ 145.000</td><td>R$ 192.000</td><td><span class="badge badge-up">↑ 32,4%</span></td></tr>
+          <tr><td>Receita Líquida</td><td>R$ 130.000</td><td>R$ 165.000</td><td><span class="badge badge-up">↑ 26,9%</span></td></tr>
+          <tr><td>CMV</td><td>R$ 82.000</td><td>R$ 108.000</td><td><span class="badge badge-down">↑ 31,7%</span></td></tr>
+          <tr><td>Margem de Contribuição</td><td>R$ 48.000</td><td>R$ 57.000</td><td><span class="badge badge-up">↑ 18,8%</span></td></tr>
+          <tr><td>Despesas Operacionais</td><td>R$ 70.800</td><td>R$ 90.500</td><td><span class="badge badge-down">↑ 27,8%</span></td></tr>
+          <tr class="total-row"><td>EBITDA</td><td style="color:#eb5757">−R$ 22.800</td><td style="color:#eb5757">−R$ 33.500</td><td><span class="badge badge-down">↓ 46,9%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ ANÁLISE ══ -->
+  <div class="panel" id="panel-analise">
+    <p class="section-label" style="margin-top:0;border-top:none;padding-top:0">Análise Automática dos Indicadores</p>
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <div class="analysis-icon gold">📈</div>
+        <h4>Crescimento de Receita Sólido</h4>
+        <p>A receita bruta cresceu 32,4% (de R$ 145k para R$ 192k), e a receita líquida subiu 26,9%. Isso indica expansão real de vendas — um sinal positivo de desenvolvimento comercial.</p>
+        <span class="analysis-verdict badge badge-up">Positivo</span>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-icon red">⚠️</div>
+        <h4>EBITDA Negativo e Piorando</h4>
+        <p>O EBITDA passou de −R$ 22.800 para −R$ 33.500. As despesas operacionais cresceram 27,8% enquanto a margem de contribuição cresceu apenas 18,8% — as despesas consomem o ganho de receita.</p>
+        <span class="analysis-verdict badge badge-down">Ponto crítico</span>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-icon blue">🏦</div>
+        <h4>Endividamento em Alta</h4>
+        <p>O passivo cresceu 30,1% — ritmo maior que o ativo (16,1%). Os empréstimos bancários quase triplicaram (R$ 12k → R$ 31k), sinalizando maior dependência de capital de terceiros.</p>
+        <span class="analysis-verdict badge badge-neutral">Atenção</span>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-icon green">✅</div>
+        <h4>Situação Líquida Positiva</h4>
+        <p>Apesar dos desafios operacionais, o patrimônio líquido é positivo em ambos os anos (R$ 160k e R$ 176k), o que indica que a empresa possui mais ativos do que obrigações — base sólida.</p>
+        <span class="analysis-verdict badge badge-up">Saudável</span>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-icon red">💸</div>
+        <h4>CMV Cresce Proporcional à Receita</h4>
+        <p>O CMV cresceu 31,7% enquanto a receita bruta cresceu 32,4% — proporção semelhante. A margem bruta ficou praticamente estável (~33%), o que é aceitável para o setor de tecnologia.</p>
+        <span class="analysis-verdict badge badge-neutral">Estável</span>
+      </div>
+      <div class="analysis-card">
+        <div class="analysis-icon gold">🎯</div>
+        <h4>Recomendação Principal</h4>
+        <p>A prioridade deve ser o controle de despesas operacionais — especialmente serviços de terceiros (+68%) e despesas administrativas (+23%). A receita cresce bem; o problema está nos custos fixos e variáveis operacionais.</p>
+        <span class="analysis-verdict badge badge-neutral">Ação necessária</span>
+      </div>
+    </div>
+
+    <p class="section-label">Evolução Visual — Receita vs Despesas</p>
+    <div class="chart-card">
+      <h3>Receita Líquida vs Custo Total (CMV + Despesas Op.)</h3>
+      <p>Quanto a empresa ganha versus quanto gasta — 2024 e 2025</p>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="c-analise" role="img" aria-label="Receita vs custos 2024 e 2025"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ÍNDICES ══ -->
+  <div class="panel" id="panel-indices">
+    <p class="section-label" style="margin-top:0;border-top:none;padding-top:0">Índices Financeiros Calculados</p>
+    <div class="indices-grid">
+      <div class="index-card">
+        <p class="index-name">Liquidez Geral</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num gold">3,28</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num blue">2,93</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> Ativo Total / Passivo Total<br>Valores acima de 1 são positivos. Ambos os anos estão saudáveis, porém com queda de 10,7%.</p>
+      </div>
+
+      <div class="index-card">
+        <p class="index-name">Grau de Endividamento</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num gold">30,5%</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num blue">34,2%</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> Passivo Total / Ativo Total × 100<br>Abaixo de 50% é considerado aceitável. Empresa opera com folga, mas endividamento cresceu.</p>
+      </div>
+
+      <div class="index-card">
+        <p class="index-name">Margem de Contribuição %</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num gold">36,9%</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num blue">34,5%</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> Margem Contrib. / Receita Líquida × 100<br>Leve redução indica que os custos variáveis cresceram um pouco mais que a receita.</p>
+      </div>
+
+      <div class="index-card">
+        <p class="index-name">Margem EBITDA</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num" style="color:var(--red)">−17,5%</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num" style="color:var(--red)">−20,3%</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> EBITDA / Receita Líquida × 100<br>Margem negativa em ambos os anos indica que as despesas operacionais superam a margem de contribuição.</p>
+      </div>
+
+      <div class="index-card">
+        <p class="index-name">Retorno sobre Ativo (ROA)</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num" style="color:var(--red)">−9,9%</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num" style="color:var(--red)">−12,5%</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> EBITDA / Ativo Total × 100<br>ROA negativo mostra que os ativos não estão gerando resultado positivo — empresa precisa cortar despesas operacionais.</p>
+      </div>
+
+      <div class="index-card">
+        <p class="index-name">Participação do Passivo no PL</p>
+        <div class="index-values">
+          <div class="index-val">
+            <span class="index-val-year">2024</span>
+            <span class="index-val-num gold">43,9%</span>
+          </div>
+          <div class="index-val">
+            <span class="index-val-year">2025</span>
+            <span class="index-val-num blue">51,9%</span>
+          </div>
+        </div>
+        <p class="index-desc"><strong style="color:var(--text)">Fórmula:</strong> Passivo / Situação Líquida × 100<br>Em 2025 o passivo ultrapassou 50% do PL pela primeira vez — crescimento da dependência de terceiros.</p>
+      </div>
+    </div>
+
+    <p class="section-label">Radar de Saúde Financeira</p>
+    <div class="chart-card">
+      <h3>Índices — 2024 vs 2025</h3>
+      <p>Visão comparativa dos principais indicadores (normalizado)</p>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="c-radar" role="img" aria-label="Radar de índices financeiros 2024 vs 2025"></canvas>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Relatório gerado para fins acadêmicos — Contabilidade Gerencial</span>
+  <span>Exercícios 2024 &amp; 2025</span>
+</footer>
+
+<script>
+// ══ DATA ══
+const d = {
+  ativo24: [32000,15000,48000,55000,12000,40000,25000,4000],
+  ativo25: [18500,28000,74000,42300,18000,55000,25000,7500],
+  desp24: [37500,6200,4800,12000,8500,1800],
+  desp25: [46100,8400,7100,12000,14300,2600],
+  ativoLabels: ['Caixa','Aplicações','Clientes','Est. Comp.','Est. Soft.','Computadores','Marcas','Móveis'],
+  despLabels: ['Adm.','Energia','Marketing','Aluguel','Terceiros','Manutenção']
+};
+
+const GOLD = '#c8a97e', BLUE = '#7eb5c8', RED = '#eb5757', GREEN = '#6fcf97', MUTED = '#7a7f96';
+const COLORS = ['#c8a97e','#7eb5c8','#a78bc4','#6fcf97','#eb5757','#f2994a','#9b51e0','#56ccf2'];
+const SURFACE = 'rgba(255,255,255,0.04)';
+
+Chart.defaults.color = MUTED;
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 12;
+
+const fmtK = v => 'R$' + (v/1000).toFixed(0) + 'k';
+const fmtFull = v => (v < 0 ? '−' : '') + 'R$ ' + Math.abs(v).toLocaleString('pt-BR');
+const ttFmt = ctx => ' R$ ' + ctx.raw.toLocaleString('pt-BR');
+
+// ══ COUNTER ANIMATION ══
+function animateCounter(el, target, duration) {
+  const negative = target < 0;
+  const abs = Math.abs(target);
+  const start = performance.now();
+  const fmt = n => (negative ? '−' : '') + 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p+2,2)/2;
+    el.textContent = fmt(abs * eased);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = fmt(abs);
+  }
+  requestAnimationFrame(step);
+}
+
+// ══ SPARKLINES ══
+function buildSparkline(id, vals, color) {
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+  const max = Math.max(...vals);
+  vals.forEach(v => {
+    const bar = document.createElement('div');
+    bar.className = 'spark-bar';
+    bar.style.background = color;
+    bar.style.opacity = '0.4';
+    bar.style.height = '0px';
+    wrap.appendChild(bar);
+    setTimeout(() => { bar.style.height = (v/max * 28) + 'px'; bar.style.opacity = v === max ? '1' : '0.35'; }, 100);
+  });
+}
+
+// ══ HEALTH BARS ══
+function animateHealth() {
+  const items = [
+    { id: 'hb1', pct: 82 }, { id: 'hb2', pct: 73 },
+    { id: 'hb3', pct: 61 }, { id: 'hb4', pct: 68 },
+    { id: 'hb5', pct: 35 }, { id: 'hb6', pct: 25 },
+  ];
+  items.forEach((item, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(item.id);
+      if (el) el.style.width = item.pct + '%';
+    }, 300 + i * 80);
+  });
+}
+
+animateHealth();
+
+// ══ CHARTS ══
+function makeDonut(id, data, labels) {
+  return new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: COLORS, borderColor: '#141720', borderWidth: 2 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.raw.toLocaleString('pt-BR') } }
+      }
+    }
+  });
+}
+
+function makeBarH(id, data, labels, color) {
+  return new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: color, borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ttFmt } } },
+      scales: {
+        x: { grid: { color: SURFACE }, ticks: { callback: fmtK } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+makeDonut('c-ativo24', d.ativo24, d.ativoLabels);
+makeBarH('c-desp24', d.desp24, d.despLabels, GOLD);
+makeDonut('c-ativo25', d.ativo25, d.ativoLabels);
+makeBarH('c-desp25', d.desp25, d.despLabels, BLUE);
+
+new Chart(document.getElementById('c-comp'), {
+  type: 'bar',
+  data: {
+    labels: ['Ativo Total','Passivo Total','Sit. Líquida','Receita Líq.','Margem Contrib.','EBITDA'],
+    datasets: [
+      { label: '2024', data: [231000,70500,160500,130000,48000,-22800], backgroundColor: GOLD, borderRadius: 4 },
+      { label: '2025', data: [268300,91700,176600,165000,57000,-33500], backgroundColor: BLUE, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ttFmt } } },
+    scales: {
+      x: { grid: { color: SURFACE }, ticks: { maxRotation: 25 } },
+      y: { grid: { color: SURFACE }, ticks: { callback: fmtK } }
+    }
+  }
+});
+
+new Chart(document.getElementById('c-analise'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025'],
+    datasets: [
+      { label: 'Receita Líquida', data: [130000, 165000], backgroundColor: GREEN, borderRadius: 4 },
+      { label: 'CMV', data: [82000, 108000], backgroundColor: GOLD, borderRadius: 4 },
+      { label: 'Despesas Operacionais', data: [70800, 90500], backgroundColor: RED, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { boxWidth: 10, padding: 14 } },
+      tooltip: { callbacks: { label: ttFmt } }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: SURFACE }, ticks: { callback: fmtK }, stacked: false }
+    }
+  }
+});
+
+new Chart(document.getElementById('c-radar'), {
+  type: 'radar',
+  data: {
+    labels: ['Liquidez Geral','Margem Contrib. %','Patrimônio Líq. %','Ativo Total (norm)','Receita Líq. (norm)'],
+    datasets: [
+      { label: '2024', data: [82, 74, 69, 62, 54], borderColor: GOLD, backgroundColor: 'rgba(200,169,126,0.12)', pointBackgroundColor: GOLD, pointRadius: 4 },
+      { label: '2025', data: [73, 69, 66, 76, 68], borderColor: BLUE, backgroundColor: 'rgba(126,181,200,0.10)', pointBackgroundColor: BLUE, pointRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { boxWidth: 10, padding: 14 } } },
+    scales: {
+      r: {
+        grid: { color: SURFACE },
+        angleLines: { color: SURFACE },
+        pointLabels: { font: { size: 11 }, color: MUTED },
+        ticks: { display: false },
+        suggestedMin: 0, suggestedMax: 100
+      }
+    }
+  }
+});
+
+// ══ TAB SWITCH ══
+const TABS = ['2024','2025','comp','analise','indices'];
+
+function switchTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  panel.classList.add('active');
+  document.querySelectorAll('.tab')[TABS.indexOf(id)].classList.add('active');
+
+  // counter animation on metric values
+  panel.querySelectorAll('.metric-value[data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    animateCounter(el, target, 900);
+  });
+
+  // sparklines
+  if (id === '2024') {
+    buildSparkline('spark-ativo24', [100,70,160,231], GOLD);
+    buildSparkline('spark-passivo24', [40,55,60,70.5], BLUE);
+    buildSparkline('spark-sl24', [60,70,120,160.5], GREEN);
+  }
+  if (id === '2025') {
+    buildSparkline('spark-ativo25', [100,70,231,268.3], GOLD);
+    buildSparkline('spark-passivo25', [40,55,70.5,91.7], RED);
+    buildSparkline('spark-sl25', [60,70,160.5,176.6], GREEN);
+  }
+}
+
+// Initial counter on load
+setTimeout(() => {
+  document.querySelectorAll('#panel-2024 .metric-value[data-target]').forEach(el => {
+    animateCounter(el, parseFloat(el.dataset.target), 1000);
+  });
+  buildSparkline('spark-ativo24', [100,70,160,231], GOLD);
+  buildSparkline('spark-passivo24', [40,55,60,70.5], BLUE);
+  buildSparkline('spark-sl24', [60,70,120,160.5], GREEN);
+}, 300);
+</script>
+</body>
+</html>
